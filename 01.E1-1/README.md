@@ -1,94 +1,147 @@
 # 프로젝트 개요
 
 ## 실행 환경
+
 - OS: Arch Linux
 - Shell + Terminal: zsh + kitty
 
+---
+
 ## 1. 터미널 실습
-- 현재 위치 확인
+
+### 현재 위치 확인
+
+```bash
+$ pwd
+/home/hay/Playground/codyssey
+```
+
+### 이동
+
+```bash
 $ pwd
 /home/hay/Playground/codyssey
 
-- 이동
-hay@x13 codyssey on  main [!] 
-❯ pwd
-/home/hay/Playground/codyssey
-hay@x13 codyssey on  main [!] 
-❯ cd 01.E1-1 
-hay@x13 codyssey/01.E1-1 on  main [!] 
-❯ pwd
-/home/hay/Playground/codyssey/01.E1-1
+$ cd 01.E1-1
 
-- 목록 확인(숨김 파일)
+$ pwd
+/home/hay/Playground/codyssey/01.E1-1
+```
+
+### 목록 확인 (숨김 파일)
+
+```bash
 $ ll -a
 total 12K
 drwxr-xr-x  3 hay hay 4.0K Jul 28 15:13 .
 drwxr-xr-x 10 hay hay 4.0K Jul 28 15:13 ..
 drwxr-xr-x  6 hay hay 4.0K Jul 28 15:13 .git
+```
 
-- 이름변경
+### 이름 변경
+
+```bash
 $ mv test test2
+
 $ ll
 total 4.0K
 drwxr-xr-x 2 hay hay 4.0K Jul 28 15:18 01.E1-1
 -rw-r--r-- 1 hay hay    0 Jul 28 15:15 test2
+```
 
-- 복사 및 이동
+### 복사 및 이동
+
+```bash
 $ cp test2 01.E1-1
+
 $ ls 01.E1-1
 test2
+
 $ cd 01.E1-1
+
 $ ll
 total 0
 -rw-r--r-- 1 hay hay 0 Jul 28 15:19 test2
+
 $ pwd
 /home/hay/Playground/codyssey/01.E1-1
+```
 
-- 삭제
+### 삭제
+
+```bash
 $ rm test2
+
 $ ll
 total 0
+```
 
-- 빈 파일 생성 및 파일 내용 확인
+### 빈 파일 생성 및 파일 내용 확인
+
+```bash
 $ touch test
+
 $ bat test
 File: test   <EMPTY>
+```
 
-- 디렉토리 생성
+### 디렉토리 생성
+
+```bash
 $ mkdir 01.E1-1
+
 $ ll
 total 4.0K
 drwxr-xr-x 2 hay hay 4.0K Jul 28 15:18 01.E1-1
 -rw-r--r-- 1 hay hay    0 Jul 28 15:15 test
+```
 
-- 권한 변경 실습
-- 변경 전
+### 권한 변경 실습
+
+#### 변경 전
+
+```bash
 $ ll
 total 4.0K
 drwxr-xr-x 2 hay hay 4.0K Jul 28 15:20 01.E1-1
 -rw-r--r-- 1 hay hay    0 Jul 28 15:15 test2
+```
 
-- 변경 후
+#### 변경 후
+
+```bash
 $ chmod 600 test2
+
 $ ll
 total 4.0K
 drwxr-xr-x 2 hay hay 4.0K Jul 28 15:20 01.E1-1
 -rw------- 1 hay hay    0 Jul 28 15:15 test2
 
 $ chmod 700 01.E1-1
+
 $ ll
 total 4.0K
 drwx------ 2 hay hay 4.0K Jul 28 15:20 01.E1-1
 -rw------- 1 hay hay    0 Jul 28 15:15 test2
+```
+
+---
 
 ## 2. Docker 실습
-### 기본 점검
-- 도커 버전
-$ docker -v 
-Docker version 29.6.2, build dfc4efb1e2
 
-> docker info
-$ docker info  
+### 기본 점검
+
+#### 도커 버전
+
+```bash
+$ docker -v
+Docker version 29.6.2, build dfc4efb1e2
+```
+
+#### docker info
+
+```bash
+$ docker info
 Client:
  Version:    29.6.2
  Context:    default
@@ -122,7 +175,7 @@ Server:
  Default Runtime: runc
  Init Binary: docker-init
  containerd version: aad11006b869517fcd3009450b6f82da282e1a9b.m
- runc version: 
+ runc version:
  init version: de40ad0
  Security Options:
   seccomp
@@ -147,18 +200,27 @@ Server:
  Firewall Backend: iptables
   EnableUserlandProxy: true
   UserlandProxyPath: /usr/bin/docker-proxy
+```
 
 ### 도커 기본 운영 명령
-- 이미지
+
+#### 이미지
+
+```bash
 $ docker images
+
                                                          i Info →   U  In Use
 IMAGE          ID             DISK USAGE   CONTENT SIZE   EXTRA
-mongo:latest   a706cb4e493b        1.3GB          339MB    U   
+mongo:latest   a706cb4e493b        1.3GB          339MB    U
+```
 
-- 컨테이너
-$ docker ps -a 
+#### 컨테이너
+
+```bash
+$ docker ps -a
+
 CONTAINER ID   IMAGE          COMMAND                  CREATED       STATUS                   PORTS     NAMES
 557a927f4c8f   mongo:latest   "docker-entrypoint.s…"   7 weeks ago   Exited (0) 7 weeks ago             local-mongo
+```
 
-- 운영
-
+#### 운영
