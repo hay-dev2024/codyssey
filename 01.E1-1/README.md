@@ -6,7 +6,6 @@
 
 ## 1. 터미널 실습
 - 현재 위치 확인
-```bash
 $ pwd
 /home/hay/Playground/codyssey
 
