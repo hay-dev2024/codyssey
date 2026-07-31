@@ -4,11 +4,27 @@
 
 - OS: Arch Linux
 - Shell + Terminal: zsh + kitty
-- git version 2.55.0
-- Docker version 29.6.2, build dfc4efb1e2
+- Git: 2.55.0
+- Docker: 29.6.2
 ---
 
 ## 1. 터미널 실습
+
+#### 절대 경로와 상대 경로
+- **절대 경로(Absolute Path)**: 루트 디렉터리(`/`)부터 시작하는 전체 경로이다.
+- **상대 경로(Relative Path)**: 현재 작업 중인 디렉터리를 기준으로 하는 경로이다.
+
+예를 들어 현재 위치가 `/home/hay/Playground/codyssey`라면,
+
+| 절대 경로 | 상대 경로 |
+|-----------|-----------|
+| `/home/hay/Playground/codyssey/01.E1-1` | `01.E1-1` |
+| `/home/hay` | `../../` |
+| `/home/hay/Downloads` | `../../Downloads` |
+
+#### 자주 사용하는 상대 경로
+- `.` : 현재 디렉터리
+- `..` : 상위 디렉터리
 
 ### 현재 위치 확인
 
@@ -107,6 +123,30 @@ drwxr-xr-x 2 hay hay 4.0K Jul 28 15:18 01.E1-1
 
 ### 권한 변경 실습
 `chmod` 명령으로 파일과 디렉터리의 접근 권한을 변경한다.
+
+#### 권한 숫자 의미
+Linux 권한은 **읽기(Read), 쓰기(Write), 실행(Execute)** 권한의 조합으로 표현한다.
+
+| 권한 | 값 |
+|------|---:|
+| Read (r) | 4 |
+| Write (w) | 2 |
+| Execute (x) | 1 |
+
+권한 숫자는 각 값을 더해서 표현한다.
+
+| 숫자 | 권한 |
+|-----:|------|
+| 7 | rwx (4+2+1) |
+| 6 | rw- (4+2) |
+| 5 | r-x (4+1) |
+| 4 | r-- (4) |
+| 0 | --- |
+
+예를 들어,
+
+- `600` : 소유자만 읽기/쓰기 가능 (`rw-------`)
+- `700` : 소유자만 읽기/쓰기/실행 가능 (`rwx------`)
 
 #### 변경 전
 
@@ -216,6 +256,18 @@ Server:
 
 ### 도커 기본 운영 명령
 Docker 이미지와 컨테이너를 관리하는 기본 명령을 실습한다.
+
+#### Docker 이미지(Image)와 컨테이너(Container)
+Docker 이미지는 애플리케이션 실행에 필요한 프로그램과 라이브러리, 설정 등을 포함하는 **읽기 전용 템플릿**이다.
+
+Docker 컨테이너는 이미지를 기반으로 생성되는 **실행 중인 인스턴스**이며, 실제 프로그램이 동작하는 환경이다.
+
+쉽게 말하면,
+
+- **이미지(Image)** : 실행 파일(설계도)
+- **컨테이너(Container)** : 실행 중인 프로그램(실체)
+
+예를 들어 `ubuntu:latest` 이미지를 사용하여 여러 개의 Ubuntu 컨테이너를 생성할 수 있다.
 
 #### 이미지
 로컬에 저장된 Docker 이미지를 확인한다.
@@ -364,6 +416,24 @@ CONTAINER ID   IMAGE     COMMAND   CREATED        STATUS          PORTS     NAME
 943a3096b745   ubuntu    "bash"    21 hours ago   Up 27 seconds             test-ubuntu
 ```
 
+#### attach와 exec의 차이
+| 명령어 | 설명 |
+|--------|------|
+| `docker attach` | 실행 중인 컨테이너의 **메인 프로세스**에 연결한다. |
+| `docker exec` | 실행 중인 컨테이너에서 **새로운 프로세스**를 실행한다. |
+
+이번 실습에서는 `attach`로 기존 Bash 프로세스에 연결한 후 `exit`을 입력하여 컨테이너가 종료되었고, `exec`는 새로운 Bash 프로세스를 실행하므로 `exit`을 입력해도 컨테이너는 계속 실행된다.
+
+<details>
+<summary><strong>왜 attach는 컨테이너가 종료되고 exec는 종료되지 않을까?</strong></summary>
+
+Docker 컨테이너는 **메인 프로세스(PID 1)** 가 실행되는 동안만 살아 있다.
+
+- `docker attach`는 메인 프로세스(PID 1)에 연결하므로 `exit`을 입력하면 메인 프로세스가 종료되고 컨테이너도 함께 종료된다.
+- `docker exec`는 메인 프로세스와 별도로 새로운 프로세스를 실행하므로, `exit`을 입력해도 새 프로세스만 종료되고 메인 프로세스는 계속 실행된다.
+
+</details>
+
 ##### 컨테이너 로그 확인
 `docker logs`를 사용하여 컨테이너의 표준 출력 로그를 확인한다.
 ```bash
@@ -477,7 +547,7 @@ ubuntu:latest        3131b4cc82a7        161MB         45.3MB    U
 ```
 
 ##### 컨테이너 실행
-생성한 이미지를 컨테이너로 실행하고 포트를 연결한다.
+생성한 이미지를 컨테이너로 실행하고 호스트의 8080 포트로 들어온 요청을 컨테이너의 80 포트(Nginx)로 전달하도록 포트를 매핑한다.
 ```bash
 $ docker run -d -p 8080:80 --name my-nginx-container my-nginx                   
 9938381a1eed62d5287250bd677111f0196d320ca0352c92a3a831b8ec80e4bc
@@ -512,6 +582,18 @@ $ curl http://localhost:8080
 
 ### 바인드 마운트 실습
 호스트 디렉터리를 컨테이너와 연결하여 파일 변경 사항이 즉시 반영되는지 확인한다.
+
+#### 바인드 마운트(Bind Mount)
+바인드 마운트는 **호스트의 파일이나 디렉터리를 컨테이너 내부와 직접 연결하는 기능**이다.
+
+호스트에서 파일을 수정하면 컨테이너 내부에도 즉시 반영되므로, 개발 환경에서 소스 코드를 실시간으로 수정할 때 자주 사용된다.
+
+```
+호스트(html/)
+        │
+        ▼
+컨테이너(/usr/share/nginx/html)
+```
 
 ##### 바인드 마운트 컨테이너 실행
 호스트의 `html` 디렉터리를 Nginx 웹 루트와 연결한다.
@@ -575,6 +657,23 @@ nginx-bind
 $ sudo chown -R $USER:$USER html
 [sudo] password for hay:
 ```
+
+<details>
+<summary><strong>chown 명령어 설명</strong></summary>
+
+#### `chown` 명령어
+
+`chown`은 파일이나 디렉터리의 **소유자(owner)** 와 **소유 그룹(group)** 을 변경하는 명령이다.
+
+- `sudo` : 관리자(root) 권한으로 명령 실행
+- `chown` : 파일 또는 디렉터리의 소유자와 그룹 변경
+- `-R` : 하위 디렉터리와 파일까지 재귀적으로 적용
+- `$USER:$USER` : 현재 로그인한 사용자를 소유자와 소유 그룹으로 지정
+
+즉, `sudo chown -R $USER:$USER html`은 `html` 디렉터리와 그 안의 모든 파일 및 디렉터리의 소유자와 소유 그룹을 현재 사용자로 변경하는 명령이다.
+
+</details>
+
 
 변경 결과를 확인한다.
 ```bash
@@ -673,6 +772,21 @@ $ curl http://localhost:8081
 ### 볼륨 생성 및 영속성 확인
 Docker Volume을 생성하여 컨테이너를 삭제해도 데이터가 유지되는지 확인한다.
 
+#### Docker Volume
+Docker Volume은 **Docker가 직접 관리하는 영구 저장 공간**이다.
+
+컨테이너를 삭제해도 Volume은 삭제되지 않으며, 동일한 Volume을 다른 컨테이너에 연결하면 기존 데이터를 그대로 사용할 수 있다.
+
+따라서 데이터베이스, 업로드 파일 등 **컨테이너보다 오래 유지되어야 하는 데이터**를 저장할 때 주로 사용한다.
+
+#### Bind Mount와 Volume의 차이
+| Bind Mount | Volume |
+|------------|--------|
+| 호스트의 특정 디렉터리를 직접 연결 | Docker가 관리하는 저장 공간 |
+| 호스트의 파일 구조를 그대로 사용 | Docker가 전용 저장 공간을 관리 |
+| 파일 변경 사항이 즉시 반영되어 개발 환경에 적합 | 데이터 영속성이 중요할 때 적합 |
+| 호스트 디렉터리에 의존 | 컨테이너와 독립적으로 관리 가능 |
+
 ##### 볼륨 생성
 새로운 Docker Volume을 생성한다.
 
@@ -754,8 +868,13 @@ $ curl http://localhost:8082
 
 ## Git 설정
 
-Git 사용자 정보와 원격 저장소 설정을 확인한다.
+Git 버전 확인
+```bash
+$ git -v       
+git version 2.55.0
+```
 
+Git 사용자 정보와 원격 저장소 설정을 확인한다.
 ```bash
 $ git config --list
 user.email=OOOOO@gmail.com
