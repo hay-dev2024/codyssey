@@ -110,6 +110,14 @@ class QuizGame:
 
             return number
 
+    def get_text_input(self, message):
+        while True:
+            text = input(message).strip()
+            if text == "":
+                print("입력이 비어 있습니다. 다시 입력하세요.")
+                continue
+            return text
+
     def play_quizzes(self):
         if len(self.quizzes) == 0:
             print("등록된 퀴즈가 없습니다.")
@@ -138,3 +146,19 @@ class QuizGame:
             self.best_score = score
             self.save_state()
             print("최고 점수가 갱신되었습니다.")
+
+    def add_quiz(self):
+        print("\n[ 퀴즈 추가 ]")
+        question = self.get_text_input("문제를 입력하세요: ")
+        choices = []
+
+        for number in range(4):
+            choice = self.get_text_input(
+                "선택지 " + str(number + 1) + "을 입력하세요: "
+            )
+            choices.append(choice)
+
+        answer = self.get_number_input("정답 번호를 입력하세요: ", 1, 4)
+        self.quizzes.append(Quiz(question, choices, answer))
+        self.save_state()
+        print("퀴즈가 추가되었습니다.")
