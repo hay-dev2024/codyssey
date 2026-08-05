@@ -71,12 +71,16 @@ class QuizGame:
 
             quizzes = []
             for item in data["quizzes"]:
+                if len(item["choices"]) != 4:
+                    raise ValueError
+                if item["answer"] < 1 or item["answer"] > 4:
+                    raise ValueError
                 quizzes.append(Quiz(
                     item["question"], item["choices"], item["answer"]
                 ))
             self.quizzes = quizzes
             self.best_score = data["best_score"]
-        except (OSError, json.JSONDecodeError, KeyError, TypeError):
+        except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
             print("상태 파일을 읽을 수 없어 기본 퀴즈로 시작합니다.")
             self.quizzes = self.create_default_quizzes()
             self.best_score = None
