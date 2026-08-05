@@ -81,3 +81,12 @@ class QuizGame:
             self.quizzes = self.create_default_quizzes()
             self.best_score = None
             self.save_state()
+
+    def show_quiz_list(self):
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return
+
+        print("\n[ 퀴즈 목록 ]")
+        for number in range(len(self.quizzes)):
+            print(str(number + 1) + ". " + self.quizzes[number].question)
