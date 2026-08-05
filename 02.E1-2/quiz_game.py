@@ -168,3 +168,29 @@ class QuizGame:
             print("아직 퀴즈를 풀지 않았습니다.")
         else:
             print("최고 점수: " + str(self.best_score) + "점")
+
+    def show_menu(self):
+        print("\n[ Linux 퀴즈 게임 ]")
+        print("1. 퀴즈 풀기")
+        print("2. 퀴즈 추가")
+        print("3. 퀴즈 목록")
+        print("4. 점수 확인")
+        print("5. 종료")
+
+    def run(self):
+        while True:
+            self.show_menu()
+            menu = self.get_number_input("메뉴 번호를 입력하세요: ", 1, 5)
+
+            if menu == 1:
+                self.play_quizzes()
+            elif menu == 2:
+                self.add_quiz()
+            elif menu == 3:
+                self.show_quiz_list()
+            elif menu == 4:
+                self.show_best_score()
+            else:
+                self.save_state()
+                print("게임을 종료합니다.")
+                break
