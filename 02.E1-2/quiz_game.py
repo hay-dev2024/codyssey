@@ -90,3 +90,51 @@ class QuizGame:
         print("\n[ 퀴즈 목록 ]")
         for number in range(len(self.quizzes)):
             print(str(number + 1) + ". " + self.quizzes[number].question)
+
+    def get_number_input(self, message, minimum, maximum):
+        while True:
+            user_input = input(message).strip()
+
+            if user_input == "":
+                print("입력이 비어 있습니다. 다시 입력하세요.")
+                continue
+
+            if not user_input.isdigit():
+                print("숫자를 입력하세요.")
+                continue
+
+            number = int(user_input)
+            if number < minimum or number > maximum:
+                print(str(minimum) + "부터 " + str(maximum) + "까지 입력하세요.")
+                continue
+
+            return number
+
+    def play_quizzes(self):
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return
+
+        correct_count = 0
+        for number in range(len(self.quizzes)):
+            print("\n[ 문제 " + str(number + 1) + " ]")
+            quiz = self.quizzes[number]
+            quiz.show_question()
+            answer = self.get_number_input("정답 번호를 입력하세요: ", 1, 4)
+
+            if quiz.is_correct(answer):
+                print("정답입니다!")
+                correct_count += 1
+            else:
+                print("오답입니다. 정답은 " + str(quiz.answer) + "번입니다.")
+
+        score = int(correct_count / len(self.quizzes) * 100)
+        print("\n[ 결과 ]")
+        print("전체 문제 수: " + str(len(self.quizzes)))
+        print("맞힌 문제 수: " + str(correct_count))
+        print("점수: " + str(score) + "점")
+
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            self.save_state()
+            print("최고 점수가 갱신되었습니다.")
