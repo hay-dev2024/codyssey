@@ -162,3 +162,9 @@ class QuizGame:
         self.quizzes.append(Quiz(question, choices, answer))
         self.save_state()
         print("퀴즈가 추가되었습니다.")
+
+    def show_best_score(self):
+        if self.best_score is None:
+            print("아직 퀴즈를 풀지 않았습니다.")
+        else:
+            print("최고 점수: " + str(self.best_score) + "점")
