@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-labelledby="title desc">
+  <title id="title">Hay profile illustration</title>
+  <desc id="desc">A simple developer profile illustration on a blue background</desc>
+  <rect width="360" height="360" rx="40" fill="#dbeafe"/>
+  <circle cx="180" cy="134" r="63" fill="#f0c7a8"/>
+  <path d="M118 130c5-55 116-71 126 1-22-15-43-20-63-20-22 0-43 7-63 19Z" fill="#1e293b"/>
+  <path d="M83 330c9-77 57-112 97-112 42 0 91 35 98 112Z" fill="#2563eb"/>
+  <path d="M145 219h70l-35 46Z" fill="#ffffff"/>
+</svg>
